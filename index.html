@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173f32">
+  <title>Elevate | Track. Alert. Save.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="toast" class="toast" role="status"></div>
+
+  <!-- LOGIN / REGISTER -->
+  <section id="authPage" class="auth-page">
+    <div class="auth-art">
+      <div class="brand brand-light"><span class="brand-icon">✳</span> elevate</div>
+      <div class="auth-message">
+        <span class="eyebrow">A LITTLE CARE GOES A LONG WAY</span>
+        <h1>Good food.<br>Less waste.<br><span>Greener living.</span></h1>
+        <p>Your kitchen companion for smarter food storage and a more sustainable home.</p>
+        <div class="art-leaves">❋　🌿　❋</div>
+      </div>
+      <p class="auth-bottom">TRACK. ALERT. SAVE.</p>
+    </div>
+
+    <div class="auth-form-side">
+      <form id="authForm" class="auth-form">
+        <div class="brand brand-dark"><span class="brand-icon">✳</span> elevate</div>
+        <p class="eyebrow">WELCOME TO YOUR SMART KITCHEN</p>
+        <h2 id="authTitle">Welcome back!</h2>
+        <p id="authSubtitle" class="muted">Sign in to see what's fresh.</p>
+
+        <div id="usernameWrap" class="field hidden">
+          <label for="username">Your name</label>
+          <input id="username" type="text" placeholder="e.g. Your name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" type="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="At least 6 characters" required minlength="6" autocomplete="current-password">
+        </div>
+        <div id="confirmWrap" class="field hidden">
+          <label for="confirmPassword">Confirm password</label>
+          <input id="confirmPassword" type="password" placeholder="Enter your password again">
+        </div>
+        <p id="authError" class="error" aria-live="polite"></p>
+        <button id="authSubmit" class="btn btn-primary btn-full" type="submit">Sign in →</button>
+        <p class="auth-switch"><span id="switchText">New to Elevate?</span>
+          <button type="button" id="switchAuth" class="text-button">Create an account</button>
+        </p>
+        <p class="tiny muted">Personal demo: account data is saved in this browser.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- APPLICATION -->
+  <div id="app" class="app hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="brand brand-light"><span class="brand-icon">✳</span> elevate</div>
+      <p class="side-caption">YOUR KITCHEN</p>
+      <button class="nav-item active" data-view="dashboard">⌂ <span>Dashboard</span></button>
+      <button class="nav-item" data-view="inventory">▤ <span>Food inventory</span></button>
+      <button class="nav-item" data-view="pantry">🛒 <span>Pantry Log</span></button>
+      <button class="nav-item" data-view="urgency">◷ <span>Expiry tracker</span></button>
+      <button class="nav-item" data-view="expired">! <span>Past expiry</span></button>
+      <button class="nav-item" data-view="report">↗ <span>Food report card</span></button>
+      <div class="sidebar-bottom">
+        <div class="side-tip"><span>🌱</span><b>Small steps, big impact.</b><p>Every saved meal makes a difference.</p></div>
+        <button id="enableNotifications" class="nav-item">♧ <span>Enable reminders</span></button>
+        <button id="logoutBtn" class="nav-item">↪ <span>Log out</span></button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn mobile-menu" aria-label="Open menu">☰</button>
+        <div><span class="eyebrow">YOUR PERSONAL FOOD MANAGER</span><div class="topbar-date" id="todayText"></div></div>
+        <div class="top-actions">
+          <button id="notificationBtn" class="icon-btn" aria-label="Notifications">♧ <span id="notificationCount" class="notification-dot hidden">0</span></button>
+          <div class="user-avatar" id="userAvatar">E</div>
+          <span id="headerName" class="user-name">Guest</span>
+        </div>
+      </header>
+
+      <div id="notificationPanel" class="notification-panel hidden">
+        <div class="section-heading"><h3>Kitchen alerts</h3><button id="closeNotifications" class="text-button">Close</button></div>
+        <div id="notificationList"></div>
+      </div>
+
+      <section id="dashboardView" class="view">
+        <div class="welcome-row">
+          <div><p class="eyebrow">A FRESH START</p><h1>Hello, <span id="welcomeName">there</span> <span>🌿</span></h1>
+          <p class="muted">Let's make every ingredient count today.</p></div>
+          <button class="btn btn-primary" data-action="add">＋ Add food item</button>
+        </div>
+
+        <div id="setupCard" class="setup-card hidden">
+          <div class="setup-icon">❋</div><div class="setup-copy">
+            <h3>Let's set up your kitchen!</h3>
+            <p>Tell us your refrigerator's storage capacity to get started.</p>
+            <form id="capacityForm" class="capacity-form">
+              <div class="field"><label for="capacity">Capacity (litres)</label><input id="capacity" type="number" min="1" max="5000" placeholder="e.g. 250" required></div>
+              <button class="btn btn-primary" type="submit">Save capacity</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <button class="stat-card" data-view="inventory"><span class="stat-icon aqua">▤</span><span class="stat-label">Items in store</span><strong id="statTotal">0</strong><span class="stat-foot">View all food →</span></button>
+          <button class="stat-card" data-view="urgency"><span class="stat-icon orange">◷</span><span class="stat-label">Use soon</span><strong id="statSoon">0</strong><span class="stat-foot">Check priorities →</span></button>
+          <button class="stat-card" data-view="expired"><span class="stat-icon red">!</span><span class="stat-label">Past expiry</span><strong id="statExpired">0</strong><span class="stat-foot">Review items →</span></button>
+          <button class="stat-card" data-view="report"><span class="stat-icon green">↗</span><span class="stat-label">Food saved</span><strong id="statSaved">0</strong><span class="stat-foot">View your impact →</span></button>
+        </div>
+
+        <div class="content-grid">
+          <div class="panel">
+            <div class="section-heading"><div><p class="eyebrow">YOUR STOCK</p><h2>Kitchen inventory</h2></div><button class="text-button" data-view="inventory">View all →</button></div>
+            <div id="dashboardInventory" class="item-list"></div>
+          </div>
+          <div class="panel">
+            <div class="section-heading"><div><p class="eyebrow">STAY AHEAD</p><h2>Expiry watch</h2></div><span class="small-pill">Live</span></div>
+            <div id="dashboardAlerts" class="alert-list"></div>
+            <div class="tip-box"><span>💡</span><div><b>Elevate tip</b><p>Keep items nearing expiry at the front of your fridge so they're easier to use.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="inventoryView" class="view hidden">
+        <div class="page-heading"><div><p class="eyebrow">EVERYTHING IN ONE PLACE</p><h1>Food inventory</h1><p class="muted">Know what you have before you shop.</p></div><button class="btn btn-primary" data-action="add">＋ Add food item</button></div>
+        <div class="panel">
+          <div class="toolbar"><input id="searchItems" type="search" placeholder="Search food items..."><select id="filterCategory"><option value="">All categories</option></select><select id="sortInventory"><option value="expiry">Sort: Expiry</option><option value="name">Sort: Name</option><option value="category">Sort: Category</option></select></div>
+          <div id="inventoryList" class="item-list"></div>
+        </div>
+      </section>
+
+      <section id="urgencyView" class="view hidden">
+        <div class="page-heading"><div><p class="eyebrow">PRIORITISE WHAT'S FRESH</p><h1>Expiry tracker</h1><p class="muted">Items are ranked by their package expiry date.</p></div></div>
+        <div class="stat-grid compact-stats">
+          <div class="stat-card"><span class="stat-label">Use today</span><strong id="dueToday">0</strong></div>
+          <div class="stat-card"><span class="stat-label">Use tomorrow</span><strong id="dueTomorrow">0</strong></div>
+          <div class="stat-card"><span class="stat-label">Expired</span><strong id="duePast">0</strong></div>
+          <div class="stat-card"><span class="stat-label">No date entered</span><strong id="dueUnknown">0</strong></div>
+        </div>
+        <div class="panel"><div id="urgencyList" class="item-list"></div></div>
+        <p class="tiny muted">Expiry labels use the dates you enter. They are not a food-safety test. When in doubt, follow package guidance and official food-safety advice.</p>
+      </section>
+
+      <section id="expiredView" class="view hidden">
+        <div class="page-heading"><div><p class="eyebrow">REVIEW WITH CARE</p><h1>Past expiry</h1><p class="muted">Check these items and decide what to do.</p></div></div>
+        <div class="notice">⚠ A date alone cannot confirm whether food is safe or unsafe. Follow the package instructions and food-safety guidance.</div>
+        <div class="panel"><div id="expiredList" class="item-list"></div></div>
+      </section>
+
+      <section id="reportView" class="view hidden">
+        <div class="page-heading"><div><p class="eyebrow">YOUR SUSTAINABLE HABITS</p><h1>Food report card</h1><p class="muted">Every little action adds up.</p></div><button id="saveReport" class="btn btn-outline">↓ Export report</button></div>
+        <div class="stat-grid">
+          <div class="stat-card"><span class="stat-label">Food wasted</span><strong id="reportWasted">0</strong><span class="stat-foot">Quantity units recorded</span></div>
+          <div class="stat-card"><span class="stat-label">Waste prevented</span><strong id="reportSaved">0</strong><span class="stat-foot">Quantity units saved</span></div>
+          <div class="stat-card"><span class="stat-label">Prevention rate</span><strong id="reportRate">0%</strong><span class="stat-foot">Saved ÷ (saved + wasted)</span></div>
+          <div class="stat-card"><span class="stat-label">Used in time</span><strong id="reportUsed">0</strong><span class="stat-foot">Recorded food items</span></div>
+        </div>
+        <div class="content-grid">
+          <div class="panel"><p class="eyebrow">YOUR FOOD CHOICES</p><h2>Saved vs wasted</h2><div class="chart-wrap"><canvas id="reportChart" height="220"></canvas></div><div id="chartLegend" class="legend"></div></div>
+          <div class="panel"><p class="eyebrow">PATTERNS TO NOTICE</p><h2>Frequently wasted</h2><div id="wastePatterns"></div><div class="tip-box"><span>🌱</span><div><b>Your next small win</b><p>Buy smaller quantities of frequently wasted items and plan meals around what you already have.</p></div></div></div>
+        </div>
+        <p class="tiny muted">Reports are based on actions recorded in Elevate. They are estimates, not measurements of actual food mass unless you consistently enter weights.</p>
+      </section>
+
+      <!-- PANTRY LOG / GROCERY LIST -->
+      <section id="pantryView" class="view hidden">
+        <div class="page-heading">
+          <div><p class="eyebrow">PLAN YOUR NEXT SHOP</p><h1>Pantry Log</h1><p class="muted">Keep your grocery list organised and mark items as you buy them.</p></div>
+        </div>
+        <div class="panel">
+          <div class="section-heading"><div><p class="eyebrow">YOUR SHOPPING LIST</p><h2>Grocery checklist</h2></div><span id="groceryCount" class="small-pill">0 items</span></div>
+          <form id="groceryForm" class="grocery-form">
+            <div class="field"><label for="groceryName">Grocery item *</label><input id="groceryName" type="text" maxlength="100" placeholder="e.g. Oats, tomatoes, milk" required></div>
+            <div class="field"><label for="groceryQuantity">Quantity</label><input id="groceryQuantity" type="text" maxlength="40" placeholder="e.g. 1 pack"></div>
+            <div class="field"><label for="groceryCategory">Category</label><select id="groceryCategory"><option>General</option><option>Fruits & vegetables</option><option>Dairy</option><option>Bakery</option><option>Meat & seafood</option><option>Pantry staples</option><option>Frozen</option><option>Household</option></select></div>
+            <button class="btn btn-primary grocery-add-btn" type="submit">＋ Add to list</button>
+          </form>
+          <div class="grocery-toolbar"><button type="button" id="showPendingGroceries" class="mini-btn active-filter">To buy</button><button type="button" id="showAllGroceries" class="mini-btn">All items</button><button type="button" id="clearBoughtGroceries" class="mini-btn delete">Clear bought items</button></div>
+          <div id="groceryList" class="grocery-list"></div>
+        </div>
+        <p class="tiny muted">Your Pantry Log is saved in this browser for the signed-in demo account. It does not sync to other devices.</p>
+      </section>
+
+      <!-- ADD / EDIT FORM -->
+      <section id="addView" class="view hidden">
+        <div class="page-heading"><div><p class="eyebrow">KEEP YOUR KITCHEN UPDATED</p><h1 id="itemFormTitle">Add food item</h1><p class="muted">A few details help Elevate track your food.</p></div><button class="btn btn-outline" data-view="dashboard">← Dashboard</button></div>
+        <form id="itemForm" class="panel item-form">
+          <input id="itemId" type="hidden">
+          <div class="form-grid">
+            <div class="field"><label for="itemCategory">Food category *</label><select id="itemCategory" required></select></div>
+            <div class="field"><label for="itemName">Food name *</label><select id="itemName" required></select><input id="customName" class="hidden" placeholder="Type food name"></div>
+            <div class="field"><label for="itemQuantity">Quantity *</label><input id="itemQuantity" type="number" min="0.01" step="any" value="1" required></div>
+            <div class="field"><label for="itemUnit">Unit</label><select id="itemUnit"><option value="items">Items</option><option value="kg">Kilograms (kg)</option><option value="g">Grams (g)</option><option value="L">Litres (L)</option><option value="ml">Millilitres (ml)</option><option value="packs">Packs</option><option value="dozen">Dozen</option></select></div>
+            <div class="field"><label for="purchaseDate">Date added / purchased *</label><input id="purchaseDate" type="date" required></div>
+            <div class="field"><label for="expiryDate">Use-by / expiry date</label><input id="expiryDate" type="date"><small>Leave blank if no date is provided.</small></div>
+            <div class="field full-width"><label for="itemNotes">Notes (optional)</label><textarea id="itemNotes" rows="3" placeholder="Storage location, opened date, meal idea..."></textarea></div>
+          </div>
+          <div class="form-actions"><button type="button" class="btn btn-outline" data-view="dashboard">Cancel</button><button type="submit" class="btn btn-primary">Save food item ✓</button></div>
+        </form>
+      </section>
+
+      <footer class="footer">Made with care for a greener kitchen <span>✳</span> <span id="storageLabel"></span></footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
